@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.example.demo.mapper.UserMapper">   
+	<select id="selectUser" parameterType="hashmap" resultType="com.example.demo.model.User">
+		SELECT *
+		FROM TBL_USER
+		WHERE USERID = #{userId}           <!--패스워드 나중에 암호화하면 비교 무의미?-->
+		<!-- 중복체크 등 재사용 여지가 많다 아이디만 비교하는거라-->
+	</select>
+	<insert id="insertUser" parameterType="hashmap">
+		INSERT INTO TBL_USER(USERID, PWD, USERNAME)
+		VALUES(#{userId}, #{pwd}, #{userName})
+	</insert>
+	
+</mapper>
