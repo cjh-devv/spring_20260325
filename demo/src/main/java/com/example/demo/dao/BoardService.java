@@ -29,6 +29,54 @@ BoardMapper boardMapper;
 		}
 		return resultMap;
 	}
-	
-	
+	public HashMap<String, Object> addBoard(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();	
+		
+		try {
+			boardMapper.insertBoard(map);
+			resultMap.put("message", "등록되었습니다!");
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			resultMap.put("message", "서버 에러!");
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+	public HashMap<String, Object> getBoard(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();	
+		
+		try {
+			if(map.get("kind").equals("view")) {
+				boardMapper.updateCnt(map);     //먼저 조회수 올리고 상세보기
+			}
+			
+			Board info = boardMapper.selectBoard(map);
+			resultMap.put("info", info);   // 뒤 list는 셀렉트로 받아온 데이터 담은 저 위 list
+			resultMap.put("message", "데이터 조회 성공");
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			resultMap.put("message", "서버 에러 발생!");
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+	public HashMap<String, Object> editBoard(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();	
+		
+		try {
+			boardMapper.updateBoard(map);
+			resultMap.put("message", "수정되었습니다!");
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			resultMap.put("message", "서버 에러!");
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
 }

@@ -6,5 +6,35 @@
 	<select id="selectBoardList" parameterType="hashmap" resultType="com.example.demo.model.Board">                   <!--이게 오버라이딩이래-->
 		SELECT *
 		FROM TBL_BOARD
+		WHERE TITLE LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY CDATETIME DESC, BOARDNO DESC
+		<!-- xml에 한해서 파라미터 타입 생략해도 되는데 써주는게 좋다. 맵퍼를보고 알아서 추론하기때문-->
 	</select>
+	<insert id="insertBoard" parameterType="hashmap">
+		INSERT INTO TBL_BOARD
+		VALUES(NULL, 'user01', #{title}, #{contents}, 0, #{kind}, NOW(), NOW())
+		<!-- 오토 인크러먼트라 자동이지만 순서 맞추기 위해 널값이라도 넣는다.   여기선 나우-->
+	</insert>
+	<select id="selectBoard" parameterType="hashmap" resultType="com.example.demo.model.Board">                   <!--이게 오버라이딩이래-->
+		SELECT *
+		FROM TBL_BOARD
+		WHERE BOARDNO = #{boardNo}
+		<!-- xml에 한해서 파라미터 타입 생략해도 되는데 써주는게 좋다. 맵퍼를보고 알아서 추론하기때문-->
+	</select>
+	<update id="updateCnt" parameterType="hashmap">
+		UPDATE TBL_BOARD
+		SET
+			CNT = CNT + 1
+		WHERE BOARDNO = #{boardNo}
+	</update>
+	<select id="updateBoard" resultType="com.example.demo.model.Board">                   <!--이게 오버라이딩이래-->
+		UPDATE TBL_BOARD
+		SET
+			TITLE = #{title},
+			CONTENTS = #{contents},
+			KIND = #{kind}
+		WHERE BOARDNO = #{boardNo}
+		<!-- xml에 한해서 파라미터 타입 생략해도 되는데 써주는게 좋다. 맵퍼를보고 알아서 추론하기때문-->
+	</select>
+	
 </mapper>
