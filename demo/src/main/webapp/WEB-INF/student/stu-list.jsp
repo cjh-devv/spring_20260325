@@ -27,6 +27,16 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
         <div>
+            <div>
+                검색어 : <input v-model="keyword">
+                <button @click="fnGetList">검색</button>
+                <select v-model="dept" @change="fnGetList">
+                    <option value="">:: 전체 ::</option>
+                    <option value="기계">기계</option>
+                    <option value="전기전자">전기전자</option>
+                    <option value="컴퓨터정보">컴퓨터정보</option>
+                </select>
+            </div>
             <table>
                 <tr>
                     <th>학번</th>
@@ -41,10 +51,16 @@
                     <td>{{item.stuName}}</td>
                     <td>{{item.stuDept}}</td>
                     <td>{{item.stuGrade}}</td>
-                    <td>{{item.stuGender}}</td>
+                    <td>
+                        <span v-if="item.stuGender == 'M'">남자</span>
+                        <span v-else>여자</span>
+                    </td>
                     <td><button @click="fnRemove(item.stuNo)">삭제</button></td>
                 </tr>
             </table>
+        </div>
+        <div>
+            <button @click="fnAdd">학생추가</button>
         </div>
     </div>
 </body>
@@ -56,13 +72,18 @@
             return {
                 // 변수 - (key : value)
 				list : [],
+                keyword : "",
+                dept : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
             fnGetList: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    keyword : self.keyword,
+                    dept : self.dept
+                };
                 $.ajax({
                     url: "http://localhost:8080/stu-list.dox",
                     dataType: "json",
@@ -90,6 +111,9 @@
                         self.fnGetList();
                     }
                 });
+            },
+            fnAdd : function(){
+                location.href="stu-add.do"
             }
         }, // methods
         mounted() {

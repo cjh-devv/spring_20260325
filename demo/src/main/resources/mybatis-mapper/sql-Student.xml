@@ -3,13 +3,28 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
 <mapper namespace="com.example.demo.mapper.StudentMapper">   
-	<select id="selectStudentList" resultType="com.example.demo.model.Student">                   <!--이게 오버라이딩이래-->
+	<select id="selectStudentList" parameterType="hashmap" resultType="com.example.demo.model.Student">         <!--이게 오버라이딩이래-->
 		SELECT *
 		FROM STUDENT
+		WHERE (STU_NO LIKE CONCAT('%', #{keyword}, '%') OR STU_NAME LIKE CONCAT('%', #{keyword}, '%')) 
+		<if test="dept != '' and dept != null">
+			AND STU_DEPT = #{dept}
+		</if>
 	</select>
 	<delete id="deleteStudent" parameterType ="hashmap"> 
 	<!--{{몇개 영향받았나=> resultType="int"!이젠 안써도 알아서 함}} 인자값받을떄는 파라미터타입  근데 여러개 받으려면 맵으로-->
 		<!-- xml은 맵을 받으면 안에있는 변수를 뺴서 나열하니까 걍 stuNo(키 이름)라고만 써도된데-->
 		DELETE FROM STUDENT WHERE STU_NO = #{stuNo}
 	</delete>
+	<select id="selectStudent" parameterType ="hashmap" resultType="com.example.demo.model.Student">                   
+		<!--  에잭의 stuNo: self.stuNo 가 컨트롤러로간다음 쭉쭉 짬떄리면서 내려오니까 저래 되는거 파라미터=해쉬맵 되는거-->
+		SELECT *
+		FROM STUDENT
+		WHERE STU_NO = #{stuNo}
+	</select>
+	<insert id="insertStudent" parameterType ="hashmap"> 
+	<!--{{몇개 영향받았나=> resultType="int"!이젠 안써도 알아서 함}} 인자값받을떄는 파라미터타입  근데 여러개 받으려면 맵으로-->
+		<!-- xml은 맵을 받으면 안에있는 변수를 뺴서 나열하니까 걍 stuNo(키 이름)라고만 써도된데-->
+		INSERT INTO STUDENT VALUES(#{stuNo}, #{stuName}, #{stuDept}, #{stuGrade}, NULL, #{stuGender}, NULL, NULL)
+	</insert>
 </mapper>

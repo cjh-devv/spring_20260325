@@ -14,9 +14,9 @@ public class StudentService {
 	@Autowired
 	StudentMapper studentMapper;
 	
-	public HashMap<String, Object> getStudentList(){
+	public HashMap<String, Object> getStudentList(HashMap<String, Object> map){
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		List<Student> list = studentMapper.selectStudentList();
+		List<Student> list = studentMapper.selectStudentList(map);
 		
 		resultMap.put("list", list);
 		resultMap.put("message", "조회성공");
@@ -32,6 +32,35 @@ public class StudentService {
 			resultMap.put("message", "삭제실패");
 		}
 		resultMap.put("result", "seccess");
+		
+		return resultMap;
+	}
+	public HashMap<String, Object> getStudent(HashMap<String, Object> map){
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Student info = studentMapper.selectStudent(map);
+		if(info != null) {
+			resultMap.put("message", "이미 사용중인 학번입니다.");
+			resultMap.put("result", "fail");
+		}else {
+			resultMap.put("message", "사용 가능한 학번입니다.");
+			resultMap.put("result", "seccess");
+		}
+		return resultMap;
+	}
+	public HashMap<String, Object> addStudent(HashMap<String, Object> map){
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			int cnt = studentMapper.insertStudent(map);
+			resultMap.put("message", "추가되었습니다!");
+			resultMap.put("result", "seccess");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			resultMap.put("message", "서버 에러 발생!");
+			resultMap.put("result", "fail");
+		}
+		
+		
 		
 		return resultMap;
 	}
