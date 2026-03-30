@@ -27,7 +27,7 @@
 			CNT = CNT + 1
 		WHERE BOARDNO = #{boardNo}
 	</update>
-	<select id="updateBoard" resultType="com.example.demo.model.Board">                   <!--이게 오버라이딩이래-->
+	<update id="updateBoard">                   <!--이게 오버라이딩이래-->
 		UPDATE TBL_BOARD
 		SET
 			TITLE = #{title},
@@ -35,6 +35,6 @@
 			KIND = #{kind}
 		WHERE BOARDNO = #{boardNo}
 		<!-- xml에 한해서 파라미터 타입 생략해도 되는데 써주는게 좋다. 맵퍼를보고 알아서 추론하기때문-->
-	</select>
+	</update>
 	
 </mapper>
